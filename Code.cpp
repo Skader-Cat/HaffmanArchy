@@ -126,7 +126,7 @@ void make_node(list<elem> *tree, int size_of_simbs) {
 							}
 					}
 				}
-				jt = tree->begin(); //на всякий случай снова сбрасываем житератор в начало
+				jt = tree->begin(); //на всякий случай снова сбрасываем житератор в начало списка
 			}
 		}
 		for (it = tree->begin(); it != tree->end(); it++) { //есть ещё один противный случай
