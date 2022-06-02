@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.c++": "cpp",
+        "*.cpp": "cpp",
+        "xiosbase": "cpp",
+        "iosfwd": "cpp"
+    }
+}

@@ -1,0 +1,58 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+/.vs/ProizvodPractic/v17/ipch/AutoPCH/fddc33c384b0374c/MAIN.ipch
+/.vs/ProizvodPractic/v17/ipch/AutoPCH/fae3f1101cc4baa9/MAIN.ipch
+/.vs/ProizvodPractic/v17/ipch/AutoPCH/be6db926a1bb49db/MAIN.ipch
+/.vs/ProizvodPractic/v17/ipch/AutoPCH/860b9c8e6b7a1ff1/CODE_SOURCE.ipch
+/.vs/ProizvodPractic/v17/ipch/AutoPCH/7959534cea51d196/CODE.ipch
+/.vs/ProizvodPractic/v17/ipch/AutoPCH/559a34b446cd78a9/CODE.ipch
+/.vs/ProizvodPractic/v17/ipch/AutoPCH/27121a12f1560e10/CODE.ipch
+/.vs/ProizvodPractic/v17/Browse.VC.opendb
+/.vs/ProizvodPractic/v17/Browse.VC.db-wal
+/.vs/ProizvodPractic/v17/Browse.VC.db-shm
+/.vs/ProizvodPractic/v17/Browse.VC.db
+/x64/Debug/vc143.pdb
+/x64/Debug/vc143.idb
+/x64/Debug/ProizvodPractic.vcxproj.FileListAbsolute.txt
+/x64/Debug/ProizvodPractic.tlog/ProizvodPractic.lastbuildstate
+/x64/Debug/ProizvodPractic.tlog/link.write.1.tlog
+/x64/Debug/ProizvodPractic.tlog/link.read.1.tlog
+/x64/Debug/ProizvodPractic.tlog/link.command.1.tlog
+/x64/Debug/ProizvodPractic.tlog/CL.write.1.tlog
+/x64/Debug/ProizvodPractic.tlog/CL.read.1.tlog
+/x64/Debug/ProizvodPractic.tlog/CL.command.1.tlog
+/x64/Debug/ProizvodPractic.pdb
+/x64/Debug/ProizvodPractic.log
+/x64/Debug/ProizvodPractic.ilk
+/x64/Debug/ProizvodPractic.exe.recipe
+/x64/Debug/main.obj.enc
