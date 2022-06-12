@@ -1,9 +1,9 @@
 #include "Code.h"
 
 
-string get_path() {
+string get_path(string phrase) {
 	string path;
-	cout << "¬ведите полный путь до файла, который желаете сжать:" << endl;
+	cout << phrase << endl;
 	cin >> path; //надо бы ввести защиту от плохих форм путей
 	return path;
 }
@@ -66,6 +66,7 @@ list <elem> make_sluzheb_info(fstream& file, string path, int* size_of_simbs) {
 		cout << i << ")Ѕуква " << it->first << " встречалась " << it->second << " раз" << endl;
 	}
 	*size_of_simbs = dict_count.size();
+	file.close();
 	return dict_to_list(dict_count);
 }
 
@@ -78,36 +79,15 @@ list <elem> dict_to_list(map <string, int> dict) {
 			el.counter = it->second;
 			el.l = nullptr;
 			el.r = nullptr;
-			el.p = nullptr;
+			el.p = "exit";
 			els.push_back(el);
 		}
 
 	return els;
 }
 
-void sort_elems(list<elem> *tree) {
-	elem temp;
-	bool flag = true;
-	
-	list<elem>::iterator it;
-	list<elem>::iterator jt =  tree->begin();
-
-}
-
-bool check_for_max(list<elem> *tree, int size_of_simbs) {
-	bool flag = false;
-	list<elem>::iterator it = tree->begin();
-	for (; it != tree->end(); it++) {
-		if (it->simb.size() == size_of_simbs) {
-			return true;
-		}
-	}
-	show_infos(*tree);
-	return false;
-}
-
 void make_node(list<elem> *tree, int size_of_simbs) {
-		show_infos(*tree);
+		//show_infos(*tree);
 	    elem new_elem;
 		list<elem>::iterator it = tree->begin();
 		int minim = INT_MAX;
@@ -120,105 +100,120 @@ void make_node(list<elem> *tree, int size_of_simbs) {
 		for (; it != tree->end(); it++) {
 			if (it->counter < minim and it->mark == false) {
 					predmin_p = minim_p;
-					predmin =
 					minim = it->counter;
 					minim_p = &(*it);
-			}
-			if (it->mark == false) {
-				count += 1;
 			}
 		}
 		it = tree->begin();
 		list<elem>::iterator jt = tree->begin();
-		if (count == 2) {
-			jt++;
-			for (; it != tree->end(); it++) {
-				for (; jt != tree->end(); jt++) {
-					if (it->mark == false and jt->mark == false) {
-						if (it->mark == false and jt->mark == false) {
-							if (it->counter > jt->counter) {
-								minim_p = &(*jt);
-								predmin_p = &(*it);
-							}
-							if (it->counter > jt->counter) {
-								predmin_p = &(*jt);
-								minim_p = &(*it);
-							}
-						}
-					}
-				}
-				jt = tree->begin();
-			}
-		}
-		for (it = tree->begin(); it != tree->end(); it++) {
-			if ((minim_p->counter == it->counter) and (minim_p->simb != it->simb)) {
-				predmin_p = &(*it);
-			}
-		}
 		minim_p->mark = true;
+		for (; jt != tree->end(); jt++) {
+			if (jt->counter < predmin and jt->mark == false) {
+				predmin = jt->counter;
+				predmin_p = &(*jt);
+			}
+		}
 		predmin_p->mark = true;
 		new_elem.counter = minim_p->counter + predmin_p->counter;
 		new_elem.simb = minim_p->simb + predmin_p->simb;
 		new_elem.l = &(*minim_p);
 		new_elem.r = &(*predmin_p);
+		if (new_elem.l != nullptr) {
+			cout << new_elem.simb << " ||левый родитель: " << new_elem.l->simb << endl;
+		}
+		if (new_elem.r != nullptr) {
+			cout << new_elem.simb << " ||правый родитель: " << new_elem.r->simb << endl;
+		}
+		new_elem.p = "norm";
+		//cout << new_elem.l->simb << " " << new_elem.l->counter << endl;
+		//cout << new_elem.r->simb << " " << new_elem.r->counter << endl;
 		//cout << "New simb: " << new_elem.simb << "||Counter: " << new_elem.counter << "||L parent:" << new_elem.l->simb << "||R parent: " << new_elem.r->simb << endl;
-		tree->push_back(new_elem);
+		tree->push_front(new_elem);
 
 }
 
-void show_infos(list<elem> tree) {
-	list<elem>::iterator it = tree.begin();
-	for (; it != tree.end(); it++) {
+void show_infos(list<elem> *tree) {
+	list<elem>::iterator it = tree->begin();
+	for (; it != tree->end(); it++) {
+		it->mark = false;
 		cout << it->simb << "||" << it->counter << "||" << it->mark << endl;
 		cout << "___________________________________" << endl;
 	}
 }
 
+map<string, string> codes_table;
+string sum;
+void obhod(elem* elem){
+	if (elem->p == "koren") {
+		sum += "1";
+		obhod(elem->l);
+		sum.pop_back();
+		sum += "0";
+		obhod(elem->r);
+	}
+	if (elem->l != nullptr and elem->p != "koren" and elem->p != "exit") {
+		elem->mark = 1;
+		sum += "1";
+		obhod(elem->l);
+	}
+	if (elem->r != nullptr and elem->p != "koren" and elem->p != "exit") {
+		sum += "0";
+		obhod(elem->r);
+	}
+	if (elem->p == "exit" and sum.size() <= 8) {
+		codes_table[elem->simb] = sum;
+		sum.pop_back();
+	}
+}
 
+void show_codes_table() {
+	map<string, string> ::iterator mit = codes_table.begin();
+	for (; mit != codes_table.end(); mit++) {
+		cout << mit->first << " " << mit->second << endl;
+	}
+}
 
+void make_output(fstream& input_file, string path) {
+	fstream file;
+	input_file.open(path);
+	char simb;
+	int ans;
+	cout << "—охранить сжатый файл по новому пути (введите 1) или по старому (введите 0)" << endl;
+	cin >> ans;
+	if (ans != 0) {
+		path = get_path("”кажите путь, куда нужно сохранить сжатый файл: ");
+	}
+	else {
+		path.replace(path.find("."), 1,  "_output.");
+	}
+	cout << path << endl;
+	file = get_file(path);
+	file.open(path);
+	string bin_buff, converted_string;
+	while (input_file.read((char*)&simb, sizeof(char))) {
+		if (simb != ' ') {
+			if (codes_table.count(string(sizeof(simb) / sizeof(char), simb)) == 1) {
+				converted_string += codes_table[string(sizeof(simb) / sizeof(char), simb)];
+			}
+			else {
+				file << simb;
+			}
+		}
 
-
-
-
-
-
-
-
-
-
-//
-//void show_infos(list<elem> infos) {
-//	list <elem>::iterator it = infos.begin();
-//}
-//
-//list <elem> make_new_node(list<elem> tree) {
-//	elem new_elem;
-//	list<elem>::iterator it = tree.begin();
-//	int minim = INT_MAX;
-//	int predmin = INT_MAX;
-//	list<elem>::iterator minim_p;
-//	list<elem>::iterator predmin_p;
-//	for (; it != tree.end(); it++) {
-//		if (it->counter < minim and it->rebro == 2) {
-//			minim = it->counter;
-//			minim_p = it;
-//		}
-//	}
-//	minim_p->rebro = 0;
-//	list<elem>::iterator jt = tree.begin();
-//	for (; jt != tree.end(); jt++) {
-//		if (jt->counter > minim_p->counter and jt->counter < predmin and jt->rebro == 2) {
-//			predmin = jt->counter;
-//			predmin_p = jt;
-//		}
-//	}
-//	predmin_p->rebro = 1;
-//	new_elem.counter = minim_p->counter + predmin_p->counter;
-//	new_elem.simb = minim_p->simb + predmin_p->simb;
-//	new_elem.left = &(minim_p->rebro);
-//	new_elem.right = &(predmin_p->rebro);
-//	tree.push_back(new_elem);
-//	return tree;
-//}
-
-
+	}
+	converted_string.push_back('&');
+	int counter = 0;
+	while (converted_string[counter] != '&') {
+		if (bin_buff.size() < 8) {
+			bin_buff += converted_string[counter];
+			counter += 1;
+		}
+		else {
+			cout << bin_buff << endl;
+			file << char(bitset<8>(bin_buff).to_ulong());
+			bin_buff = "";
+		}
+	}
+	file.close();
+	input_file.close();
+}
