@@ -1,45 +1,38 @@
-#include "Code.h"
+п»ї#include "Code.h"
 
 
 string get_path(string phrase) {
 	string path;
 	cout << phrase << endl;
-	cin >> path; //надо бы ввести защиту от плохих форм путей
+	cin >> path; //РЅР°РґРѕ Р±С‹ РІРІРµСЃС‚Рё Р·Р°С‰РёС‚Сѓ РѕС‚ РїР»РѕС…РёС… С„РѕСЂРј РїСѓС‚РµР№
 	return path;
 }
 
 string replace(string path) {
 	for (int i = 0; i < path.length(); i++) {
 		if (path[i] == '\\') {
-			path[i] = '/';
+			path[i] = '/';	
 		}
 	}
 	return path;
 }
 
-bool check_for_void(fstream &file) {
-	//функция для проверки файла на наличие символов. 
-	return true;
-}
-
-
-
 fstream get_file(string path){
 	fstream file;
 	file.open(path, ios::app | ios::binary);
-	if (file.is_open()){ //есть проблема. Если путь не имеет форму пути, то пишет, что всё окей
-		cout << "Файл открыт" << endl;
-		//тут должна быть проверка на пустоту при помощи функции проверки))
+	if (file.is_open()){ //РµСЃС‚СЊ РїСЂРѕР±Р»РµРјР°. Р•СЃР»Рё РїСѓС‚СЊ РЅРµ РёРјРµРµС‚ С„РѕСЂРјСѓ РїСѓС‚Рё, С‚Рѕ РїРёС€РµС‚, С‡С‚Рѕ РІСЃС‘ РѕРєРµР№
+		cout << "Р¤Р°Р№Р» РѕС‚РєСЂС‹С‚" << endl;
+		//С‚СѓС‚ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РїСЂРѕРІРµСЂРєР° РЅР° РїСѓСЃС‚РѕС‚Сѓ РїСЂРё РїРѕРјРѕС‰Рё С„СѓРЅРєС†РёРё РїСЂРѕРІРµСЂРєРё))
 		//if (check_for_void(file) == true) {
-		//	cout << "Файл в норме. Готов к сжатию!" << endl;
+		//	cout << "Р¤Р°Р№Р» РІ РЅРѕСЂРјРµ. Р“РѕС‚РѕРІ Рє СЃР¶Р°С‚РёСЋ!" << endl;
 		//	cout << check_for_void(file) << endl; 
 		//}
 		//else {
-		//	cout << "Файл пуст или повреждён" << endl;
+		//	cout << "Р¤Р°Р№Р» РїСѓСЃС‚ РёР»Рё РїРѕРІСЂРµР¶РґС‘РЅ" << endl;
 		//}
 	}
 	else {
-		cout << "Файл по заданному пути не обнаружен" << endl;
+		cout << "Р¤Р°Р№Р» РїРѕ Р·Р°РґР°РЅРЅРѕРјСѓ РїСѓС‚Рё РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅ" << endl;
 	}
 	file.close();
 	return file;
@@ -48,22 +41,22 @@ fstream get_file(string path){
 list <elem> make_sluzheb_info(fstream& file, string path, int* size_of_simbs) {
 	char simb;
 	file.open(path);
-	//весьма перспективная штука, если доработать
-	string s = "iconv -t WINDOWS-1251 -f UTF-8 " + path + "> 1.tmp && move 1.tmp " + path; //команда для конвертации в ANSI кодировку, чтобы работать с русскими символами
-	const char* sw = s.c_str();              //складывать удобнее строки, поэтому до этого я работал с ними. Но system, который выполнит мою команду, принимает только чары
-	system(sw); //используем команду конвертации
-	cout << "Подсчитаем кол-во символов!" << endl;
+	//РІРµСЃСЊРјР° РїРµСЂСЃРїРµРєС‚РёРІРЅР°СЏ С€С‚СѓРєР°, РµСЃР»Рё РґРѕСЂР°Р±РѕС‚Р°С‚СЊ
+	string s = "iconv -t WINDOWS-1251 -f UTF-8 " + path + "> 1.tmp && move 1.tmp " + path; //РєРѕРјР°РЅРґР° РґР»СЏ РєРѕРЅРІРµСЂС‚Р°С†РёРё РІ ANSI РєРѕРґРёСЂРѕРІРєСѓ, С‡С‚РѕР±С‹ СЂР°Р±РѕС‚Р°С‚СЊ СЃ СЂСѓСЃСЃРєРёРјРё СЃРёРјРІРѕР»Р°РјРё
+	const char* sw = s.c_str();              //СЃРєР»Р°РґС‹РІР°С‚СЊ СѓРґРѕР±РЅРµРµ СЃС‚СЂРѕРєРё, РїРѕСЌС‚РѕРјСѓ РґРѕ СЌС‚РѕРіРѕ СЏ СЂР°Р±РѕС‚Р°Р» СЃ РЅРёРјРё. РќРѕ system, РєРѕС‚РѕСЂС‹Р№ РІС‹РїРѕР»РЅРёС‚ РјРѕСЋ РєРѕРјР°РЅРґСѓ, РїСЂРёРЅРёРјР°РµС‚ С‚РѕР»СЊРєРѕ С‡Р°СЂС‹
+	system(sw); //РёСЃРїРѕР»СЊР·СѓРµРј РєРѕРјР°РЅРґСѓ РєРѕРЅРІРµСЂС‚Р°С†РёРё
+	cout << "РџРѕРґСЃС‡РёС‚Р°РµРј РєРѕР»-РІРѕ СЃРёРјРІРѕР»РѕРІ!" << endl;
 	map <string, int> dict_count;
 	while (file.read((char*)&simb, sizeof(char))) {
 		if (simb != ' ') {
-			dict_count[string(sizeof(simb) / sizeof(char), simb)]++; //здесь я записываю в словарь строки, потому что в дальнейшем удобно работать именно в этом формате
+			dict_count[string(sizeof(simb) / sizeof(char), simb)]++; //Р·РґРµСЃСЊ СЏ Р·Р°РїРёСЃС‹РІР°СЋ РІ СЃР»РѕРІР°СЂСЊ СЃС‚СЂРѕРєРё, РїРѕС‚РѕРјСѓ С‡С‚Рѕ РІ РґР°Р»СЊРЅРµР№С€РµРј СѓРґРѕР±РЅРѕ СЂР°Р±РѕС‚Р°С‚СЊ РёРјРµРЅРЅРѕ РІ СЌС‚РѕРј С„РѕСЂРјР°С‚Рµ
 		}
 	}
-	//отладка для вывода элементов
+	//РѕС‚Р»Р°РґРєР° РґР»СЏ РІС‹РІРѕРґР° СЌР»РµРјРµРЅС‚РѕРІ
 
 	map <string, int> ::iterator it = dict_count.begin();
 	for (int i = 0; it != dict_count.end(); it++, i++) {
-		cout << i << ")Буква " << it->first << " встречалась " << it->second << " раз" << endl;
+		cout << i << ")РЎРёРјРІРѕР» " << it->first << " РІСЃС‚СЂРµС‡Р°Р»СЃСЏ " << it->second << " СЂР°Р·" << endl;
 	}
 	*size_of_simbs = dict_count.size();
 	file.close();
@@ -119,10 +112,10 @@ void make_node(list<elem> *tree, int size_of_simbs) {
 		new_elem.l = &(*minim_p);
 		new_elem.r = &(*predmin_p);
 		if (new_elem.l != nullptr) {
-			cout << new_elem.simb << " ||левый родитель: " << new_elem.l->simb << endl;
+			cout << new_elem.simb << " ||Р»РµРІС‹Р№ СЂРѕРґРёС‚РµР»СЊ: " << new_elem.l->simb << endl;
 		}
 		if (new_elem.r != nullptr) {
-			cout << new_elem.simb << " ||правый родитель: " << new_elem.r->simb << endl;
+			cout << new_elem.simb << " ||РїСЂР°РІС‹Р№ СЂРѕРґРёС‚РµР»СЊ: " << new_elem.r->simb << endl;
 		}
 		new_elem.p = "norm";
 		//cout << new_elem.l->simb << " " << new_elem.l->counter << endl;
@@ -145,13 +138,13 @@ map<string, string> codes_table;
 string sum;
 void obhod(elem* elem){
 	if (elem->p == "koren") {
-		sum += "1";
-		obhod(elem->l);
-		sum.pop_back();
 		sum += "0";
 		obhod(elem->r);
+		sum += "1";
+		obhod(elem->l);
 	}
 	if (elem->l != nullptr and elem->p != "koren" and elem->p != "exit") {
+		cout << "РќР°С…РѕР¶СѓСЃСЊ РІ СѓР·Р»Рµ : " << elem->simb << " || РЅР° РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РєРѕРґ: " << sum << endl;
 		elem->mark = 1;
 		sum += "1";
 		obhod(elem->l);
@@ -161,46 +154,56 @@ void obhod(elem* elem){
 		obhod(elem->r);
 	}
 	if (elem->p == "exit" and sum.size() <= 8) {
+		cout << "РќР°С…РѕР¶СѓСЃСЊ РІ СѓР·Р»Рµ : " << elem->simb << " || РЅР° РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РєРѕРґ: " << sum << endl;
 		codes_table[elem->simb] = sum;
+	}
+	if (sum.size() >= 1) {
 		sum.pop_back();
 	}
 }
 
-void show_codes_table() {
-	map<string, string> ::iterator mit = codes_table.begin();
-	for (; mit != codes_table.end(); mit++) {
+void show_table(map<string, string>* table) {
+	map<string, string> ::iterator mit = table->begin();
+	for (; mit != table->end(); mit++) {
 		cout << mit->first << " " << mit->second << endl;
 	}
 }
 
-void make_output(fstream& input_file, string path) {
-	fstream file;
+string make_output(fstream& input_file, string path, fstream& output_file) {
 	input_file.open(path);
 	char simb;
 	int ans;
-	cout << "Сохранить сжатый файл по новому пути (введите 1) или по старому (введите 0)" << endl;
+	cout << "РЎРѕС…СЂР°РЅРёС‚СЊ СЃР¶Р°С‚С‹Р№ С„Р°Р№Р» РїРѕ РЅРѕРІРѕРјСѓ РїСѓС‚Рё (РІРІРµРґРёС‚Рµ 1) РёР»Рё РїРѕ СЃС‚Р°СЂРѕРјСѓ (РІРІРµРґРёС‚Рµ 0)" << endl;
 	cin >> ans;
 	if (ans != 0) {
-		path = get_path("Укажите путь, куда нужно сохранить сжатый файл: ");
+		path = get_path("РЈРєР°Р¶РёС‚Рµ РїСѓС‚СЊ, РєСѓРґР° РЅСѓР¶РЅРѕ СЃРѕС…СЂР°РЅРёС‚СЊ СЃР¶Р°С‚С‹Р№ С„Р°Р№Р»: ");
 	}
 	else {
 		path.replace(path.find("."), 1,  "_output.");
 	}
 	cout << path << endl;
-	file = get_file(path);
-	file.open(path);
+	output_file = get_file(path);
+	output_file.open(path);
 	string bin_buff, converted_string;
+
+	map<string, string> ::iterator mit = codes_table.begin();
+	for (; mit != codes_table.end(); mit++) {
+		output_file << mit->first << "Р‚" << mit->second << "РЉ";
+	}
+	output_file << "}exit" << endl;
+
 	while (input_file.read((char*)&simb, sizeof(char))) {
 		if (simb != ' ') {
 			if (codes_table.count(string(sizeof(simb) / sizeof(char), simb)) == 1) {
 				converted_string += codes_table[string(sizeof(simb) / sizeof(char), simb)];
 			}
 			else {
-				file << simb;
+				output_file << simb;
 			}
 		}
 
 	}
+	
 	converted_string.push_back('&');
 	int counter = 0;
 	while (converted_string[counter] != '&') {
@@ -210,10 +213,49 @@ void make_output(fstream& input_file, string path) {
 		}
 		else {
 			cout << bin_buff << endl;
-			file << char(bitset<8>(bin_buff).to_ulong());
+			output_file << char(bitset<8>(bin_buff).to_ulong());
 			bin_buff = "";
 		}
 	}
-	file.close();
+	output_file.close();
 	input_file.close();
+	return path;
+}
+
+map<string, string> decode_table;
+
+void table_decode(fstream& output_file, string path) {
+	output_file.open(path);
+	char simb;
+	string second;
+	string sub;
+	while (output_file.read((char*)&simb, sizeof(char))) {
+		if (sub != "}exit") {
+			sub += simb;
+			if (simb == 'Р‚') {
+				sub.pop_back();
+				second = sub;
+				sub = "";
+			}
+			if (simb == 'РЉ') {
+				sub.pop_back();
+				decode_table[sub] = second;
+				sub = "";
+			}
+		}
+	}
+	output_file.close();
+}
+
+void make_decode(fstream& output_file, string path) {
+	output_file.open(path);
+	char simb;
+	string converted_string;
+	while (output_file.read((char*)&simb, sizeof(char))) {
+		if (simb != ' ') {
+			cout << bitset<8>(simb).to_ullong() << endl;
+			simb;
+		}
+
+	}
 }

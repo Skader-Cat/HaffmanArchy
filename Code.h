@@ -7,6 +7,7 @@
 #include <string>
 #include <bitset>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ struct elem
 	int counter;
 };
 extern map<string, string> codes_table;
+extern map<string, string> decode_table;
 
 string get_path(string phrase);
 string replace(string path);
@@ -44,6 +46,10 @@ void sort_elems(list<elem>* tree);
 
 void obhod(elem* elem);
 
-void show_codes_table();
+void show_table(map<string, string>* table);
 
-void make_output(fstream& input_file, string path);
+string make_output(fstream& input_file, string path, fstream& output_file);
+
+void table_decode(fstream& output_file, string path);
+
+void make_decode(fstream& output_file, string path);
